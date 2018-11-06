@@ -1,0 +1,19 @@
+
+public class WorkManager extends Thread {
+	
+	public synchronized void run() {
+		try {
+			wait();
+			if (Status.getBombStatus() == bombStatus.NEUTRALIZED){
+				System.out.println("Success!");
+			} else {
+				System.out.println("Failure!");
+			}
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	public synchronized void notifyMe() {
+		notify();
+	}
+}
