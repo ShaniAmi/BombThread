@@ -1,0 +1,24 @@
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+
+public class Main {
+
+	public static void main(String[] args) {
+		int miliSecondsTillExplosion = 100;
+		int numberOfSappers = 7;
+		
+		BlockingQueue<Request> queue = new LinkedBlockingQueue<Request>();
+		BombThread bomb = new BombThread(miliSecondsTillExplosion, queue);
+		TimeBase timeBase = new TimeBase(miliSecondsTillExplosion, queue);
+		Status.setBombStatus(bombStatus.ONPROCESS);
+		bomb.start();
+		timeBase.start();
+		SappersThread sapperThread;
+		for (int numOfThreads = 0; numOfThreads < numberOfSappers; numOfThreads++) {
+			sapperThread = new SappersThread(queue);
+			sapperThread.start();
+		}
+	}
+
+}
