@@ -1,0 +1,25 @@
+import java.util.concurrent.BlockingQueue;
+
+
+public class TimeBase extends Thread {
+	
+	public long startTime;
+	public int secondsLeftToExplosion;
+	private final BlockingQueue<Request> queue;
+	
+	public TimeBase(int secondsLeftToExplosion, BlockingQueue<Request> queue) {
+		this.secondsLeftToExplosion = secondsLeftToExplosion;
+		this.queue = queue;
+	}
+	
+	public void run() {
+		startTime = System.currentTimeMillis();
+		try {
+			while (Status.getBombStatus() == bombStatus.ONPROCESS) {
+				int timeLeft = (int) (secondsLeftToExplosion - (System.currentTimeMillis() - startTime));
+				queue.put(new Request("update time left", timeLeft));
+				sleep(50);
+			}	
+		} catch (InterruptedException ie) {
+			ie.printStackTrace();
+		}		
